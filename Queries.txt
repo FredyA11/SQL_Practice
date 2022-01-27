@@ -1,0 +1,73 @@
+CREATE DATABASE school;
+
+USE school;
+
+CREATE TABLE Course(
+    ID varchar(50),
+    CourseName varchar(200),
+    Credits int
+);
+
+CREATE TABLE Student(
+	ID varchar(50),
+    FirstName varchar(200),
+    LastName varchar(200),
+    email varchar(200)
+);
+
+CREATE TABLE Enrollment(
+	ID varchar(50),
+    studentID varchar(200),
+    courseID varchar(200),
+    grade float 
+);
+
+ALTER TABLE Student ADD PRIMARY KEY(ID);
+
+ALTER TABLE Course ADD PRIMARY KEY(ID);
+
+ALTER TABLE Enrollment ADD PRIMARY KEY(ID);
+
+ALTER TABLE Enrollment ADD FOREIGN KEY(studentID) REFERENCES Student(ID);
+
+ALTER TABLE Enrollment ADD FOREIGN KEY(courseID) REFERENCES Course(ID);
+
+
+INSERT INTO Course(ID,CourseName,Credits) VALUES ("PR-01","Programming 1","8");
+INSERT INTO Course(ID,CourseName,Credits) VALUES ("PR-02","Programming 2","10");
+INSERT INTO Course(ID,CourseName,Credits) VALUES ("M0-01","Math 1","10");
+INSERT INTO Course(ID,CourseName,Credits) VALUES ("M0-02","Math 2","11");
+INSERT INTO Course(ID,CourseName,Credits) VALUES ("H0-01","History 1","10");
+INSERT INTO Course(ID,CourseName,Credits) VALUES ("H0-02","History 2","11");
+
+INSERT INTO Student(ID,FirstName,LastName,email) VALUES ("A01","Fredy","Avila","fredyr_99@hotmail.com");
+INSERT INTO Student(ID,FirstName,LastName,email) VALUES ("A02","Daniel","Villegas","daniel_99@hotmail.com");
+INSERT INTO Student(ID,FirstName,LastName,email) VALUES ("A03","Raul","Avalos","raul12@hotmail.com");
+INSERT INTO Student(ID,FirstName,LastName,email) VALUES ("A04","Diego","Acosta","diego@hotmail.com");
+
+
+DELETE FROM course WHERE ID="M0-01";
+DELETE FROM course WHERE ID="M0-02";
+
+INSERT INTO Enrollment(ID,studentID,courseID,grade) VALUES ("E-02","A01","PR-01",90);
+INSERT INTO Enrollment(ID,studentID,courseID,grade) VALUES ("E-02","A01","H0-01",85);
+INSERT INTO Enrollment(ID,studentID,courseID,grade) VALUES ("E-03","A02","PR-01",95);
+INSERT INTO Enrollment(ID,studentID,courseID,grade) VALUES ("E-05","A02","H0-02",95);
+INSERT INTO Enrollment(ID,studentID,courseID,grade) VALUES ("E-06","A03","H0-02",95);
+INSERT INTO Enrollment(ID,studentID,courseID,grade) VALUES ("E-07","A01","H0-02",95);
+
+
+##Enrolled students
+SELECT student.ID,student.FirstName,student.LastName FROM student INNER JOIN enrollment ON student.ID = enrollment.studentID;
+SELECT student.ID,student.FirstName,student.LastName FROM student LEFT JOIN enrollment ON student.ID = enrollment.studentID WHERE enrollment.studentID IS NULL ;
+
+SELECT COUNT(student.ID) FROM student INNER JOIN enrollment ON student.ID = enrollment.studentID;
+
+SELECT COUNT(studentID) FROM school.enrollment WHERE courseID="PR-01";
+SELECT COUNT(studentID) FROM school.enrollment WHERE courseID="PR-02";
+SELECT COUNT(studentID) FROM school.enrollment WHERE courseID="M0-01";
+SELECT COUNT(studentID) FROM school.enrollment WHERE courseID="M0-02";
+SELECT COUNT(studentID) FROM school.enrollment WHERE courseID="H0-01";
+SELECT COUNT(studentID) FROM school.enrollment WHERE courseID="H0-02";
+
+SELECT course.CourseName FROM course INNER JOIN enrollment ON enrollment.courseID = course.ID GROUP BY course.CourseName ORDER BY COUNT(enrollment.studentID) DESC LIMIT 1;
