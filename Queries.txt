@@ -1,3 +1,18 @@
+CREATE DATABASE testing;
+
+USE testing;
+
+CREATE TABLE randomTable(
+    ID varchar(50),
+    Name varchar(100),
+    PRIMARY KEY(ID)
+);
+
+DROP TABLE randomTable;
+DROP DATABASE testing;
+
+
+
 CREATE DATABASE school;
 
 USE school;
